@@ -60,9 +60,10 @@ Changes to this file may cause incorrect behavior and will be lost if the code i
     </xsl:variable>
     <xs:complexType name="{$fullType}">
       <xs:all>
-        <xsl:apply-templates select="field/FieldDescriptorProto[type='TYPE_MESSAGE']" mode="elements"/>
+        <xsl:apply-templates select="field/FieldDescriptorProto[normalize-space(type) = 'TYPE_MESSAGE']" mode="elements"/>
+        <xsl:apply-templates select="field/FieldDescriptorProto[normalize-space(type) != 'TYPE_MESSAGE']" mode="elements"/>
       </xs:all>
-      <xsl:apply-templates select="field/FieldDescriptorProto[type!='TYPE_MESSAGE']" mode="attributes"/>
+      <xsl:apply-templates select="field/FieldDescriptorProto[normalize-space(label) != 'LABEL_REPEATED']" mode="attributes"/>
     </xs:complexType>
     <xsl:apply-templates select="enum_type/EnumDescriptorProto" />
     <xsl:apply-templates select="nested_type/DescriptorProto" />
@@ -70,7 +71,7 @@ Changes to this file may cause incorrect behavior and will be lost if the code i
 
   <xsl:template match="FieldDescriptorProto[normalize-space(label) != 'LABEL_REPEATED']" mode="attributes">
     <xsl:choose>
-      <xsl:when test="type!='TYPE_MESSAGE'">
+      <xsl:when test="normalize-space(type) != 'TYPE_MESSAGE'">
         <xs:attribute name="{name}">
           <xsl:attribute name="use">
             <xsl:choose>
@@ -112,21 +113,9 @@ Changes to this file may cause incorrect behavior and will be lost if the code i
             </xsl:choose>
           </xsl:if>
 
-          <xsl:choose>
-            <xsl:when test="type_name">
-              <xsl:attribute name="type">
-                <xsl:value-of select="substring-after(type_name, '.')" />
-              </xsl:attribute>
-            </xsl:when>
-            <xsl:when test="type">
-              <xsl:attribute name="type">
-                <xsl:call-template name="ConvertProtobufTypeToXsdType">
-                  <xsl:with-param name="type" select="type"/>
-                </xsl:call-template>
-              </xsl:attribute>
-            </xsl:when>
-          </xsl:choose>
-
+          <xsl:attribute name="type">
+            <xsl:call-template name="GetPrimitiveType" />
+          </xsl:attribute>
         </xs:attribute>
       </xsl:when>
     </xsl:choose>
@@ -158,8 +147,20 @@ Changes to this file may cause incorrect behavior and will be lost if the code i
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="FieldDescriptorProto[label='LABEL_REPEATED']" mode="attributes" />
-  <xsl:template match="FieldDescriptorProto[label='LABEL_REPEATED']" mode="elements">
+  <xsl:template match="FieldDescriptorProto[normalize-space(type) != 'TYPE_MESSAGE' and normalize-space(label) = 'LABEL_REPEATED']" mode="elements">
+    <xsl:variable name="primitiveType">
+      <xsl:call-template name="GetPrimitiveType" />
+    </xsl:variable>
+    <xs:element name="{name}s">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element name="{name}" type="{$primitiveType}" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+  </xsl:template>
+
+  <xsl:template match="FieldDescriptorProto[type='TYPE_MESSAGE' and label='LABEL_REPEATED']" mode="elements">
     <xsl:variable name="primitiveType">
       <xsl:call-template name="ConvertProtobufTypeToXsdType">
         <xsl:with-param name="type" select="type"/>
@@ -205,6 +206,19 @@ Changes to this file may cause incorrect behavior and will be lost if the code i
     </xsl:variable>
     <xsl:comment><xsl:value-of select="name"/>:</xsl:comment>
     <xs:enumeration value="{$value}" />
+  </xsl:template>
+
+  <xsl:template name="GetPrimitiveType">
+    <xsl:choose>
+      <xsl:when test="type_name">
+        <xsl:value-of select="substring-after(type_name, '.')" />
+      </xsl:when>
+      <xsl:when test="type">
+        <xsl:call-template name="ConvertProtobufTypeToXsdType">
+          <xsl:with-param name="type" select="type"/>
+        </xsl:call-template>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="ConvertProtobufTypeToXsdType">

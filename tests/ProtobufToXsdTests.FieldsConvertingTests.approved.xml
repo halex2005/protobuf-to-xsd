@@ -1,5 +1,4 @@
-﻿ 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+﻿<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
   <!--Generated from: protobuf-fields.proto-->
   <!--Namespace: protobuf-fields-->
   <xs:complexType name="RootElement">
@@ -10,6 +9,20 @@
         <xs:complexType>
           <xs:sequence>
             <xs:element name="ComplexRepeated" type="ChildElement" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SimpleRepeateds">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="SimpleRepeated" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="EnumeratedRepeateds">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="EnumeratedRepeated" type="EnumerationElement" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>

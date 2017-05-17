@@ -15,14 +15,17 @@ namespace tests
 		private string ConvertProtobufToXsd(string protoFilePath)
 		{
 			var currentAssemblyDirectory = Path.GetDirectoryName(new Uri(typeof(ProtobufToXsdTests).Assembly.CodeBase).AbsolutePath);
-			var protogenPath = Path.Combine(
-				currentAssemblyDirectory,
-				"protobuf-to-xsd",
-				"protogen.exe");
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				var startInfo = new ProcessStartInfo(protogenPath, $"-i:{protoFilePath} -o:{tempFile} -d -t:xsd-attributes")
+				var protogenPath = Path.Combine(
+					currentAssemblyDirectory,
+					"protobuf-to-xsd",
+					"protogen.exe");
+				var arguments = $"-i:\"{protoFilePath}\" -o:\"{tempFile}\" -d -t:xsd-attributes";
+				Console.WriteLine($"Starting process: \"{protogenPath}\" {arguments}");
+
+				var startInfo = new ProcessStartInfo(protogenPath, arguments)
 				{
 					CreateNoWindow = true,
 					UseShellExecute = false,
@@ -37,8 +40,7 @@ namespace tests
 				process.OutputDataReceived += (s, o) => { Console.Write(o.Data); };
 				process.ErrorDataReceived += (s, o) => { Console.Write(o.Data); };
 				process.WaitForExit();
-				if (process.ExitCode != 0)
-					return $"Process returned code {process.ExitCode}";
+				Console.WriteLine($"Exit code: {process.ExitCode}");
 				return File.ReadAllText(tempFile);
 			}
 			finally
