@@ -79,7 +79,7 @@ Changes to this file may cause incorrect behavior and will be lost if the code i
             </xsl:choose>
           </xsl:attribute>
 
-          <xsl:if test="(not(label) or label='LABEL_OPTIONAL') and default_value">
+          <xsl:if test="default_value">
             <xsl:variable name="fullType">
               <xsl:value-of select="substring-after(type_name, '.')" />
             </xsl:variable>
@@ -150,7 +150,7 @@ Changes to this file may cause incorrect behavior and will be lost if the code i
     <xsl:choose>
       <xsl:when test="type='TYPE_MESSAGE'">
         <xs:element name="{name}" type="{substring-after(type_name, '.')}">
-          <xsl:if test="label='LABEL_OPTIONAL'">
+          <xsl:if test="not(label) or label='LABEL_OPTIONAL'">
             <xsl:attribute name="minOccurs">0</xsl:attribute>
           </xsl:if>
         </xs:element>

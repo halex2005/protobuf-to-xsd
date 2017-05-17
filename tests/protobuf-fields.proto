@@ -1,0 +1,32 @@
+message RootElement
+{
+	//required fields
+	required string SimpleRequired = 1;
+	required string SimpleRequiredWithDefault = 2 [ default = "SimpleRequiredDefaultValue" ];
+	required ChildElement ComplexRequired = 3;
+	required EnumerationElement EnumeratedRequired = 4;
+	required EnumerationElement EnumeratedRequiredWithDefault = 5 [ default = SecondValue ];
+
+	//optional fields
+	optional string SimpleOptional = 11;
+	optional string SimpleOptionalWithDefault = 12 [ default = "SimpleOptionalDefaultValue" ];
+	optional ChildElement ComplexOptional = 13;
+	optional EnumerationElement EnumeratedOptional = 14;
+	optional EnumerationElement EnumeratedOptionalWithDefault = 15 [ default = SecondValue ];
+
+	//repeated fields
+	repeated string SimpleRepeated = 21;
+	repeated ChildElement ComplexRepeated = 22;
+	repeated EnumerationElement EnumeratedRepeated = 23;
+}
+
+message ChildElement
+{
+	required string ChildValue = 1;
+}
+
+enum EnumerationElement
+{
+	FirstValue = 1;
+	SecondValue = 2;
+}

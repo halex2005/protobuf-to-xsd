@@ -1,0 +1,38 @@
+﻿ 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <!--Generated from: protobuf-fields.proto-->
+  <!--Namespace: protobuf-fields-->
+  <xs:complexType name="RootElement">
+    <xs:all>
+      <xs:element name="ComplexRequired" type="ChildElement" />
+      <xs:element name="ComplexOptional" type="ChildElement" minOccurs="0" />
+      <xs:element name="ComplexRepeateds">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ComplexRepeated" type="ChildElement" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="SimpleRequired" use="required" type="xs:string" />
+    <xs:attribute name="SimpleRequiredWithDefault" use="required" default="SimpleRequiredDefaultValue" type="xs:string" />
+    <xs:attribute name="EnumeratedRequired" use="required" type="EnumerationElement" />
+    <xs:attribute name="EnumeratedRequiredWithDefault" use="required" type="EnumerationElement" />
+    <xs:attribute name="SimpleOptional" use="optional" type="xs:string" />
+    <xs:attribute name="SimpleOptionalWithDefault" use="optional" default="SimpleOptionalDefaultValue" type="xs:string" />
+    <xs:attribute name="EnumeratedOptional" use="optional" type="EnumerationElement" />
+    <xs:attribute name="EnumeratedOptionalWithDefault" use="optional" type="EnumerationElement" />
+  </xs:complexType>
+  <xs:complexType name="ChildElement">
+    <xs:all />
+    <xs:attribute name="ChildValue" use="required" type="xs:string" />
+  </xs:complexType>
+  <xs:simpleType name="EnumerationElement">
+    <xs:restriction base="xs:string">
+      <!--FirstValue:-->
+      <xs:enumeration value="1" />
+      <!--SecondValue:-->
+      <xs:enumeration value="2" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
