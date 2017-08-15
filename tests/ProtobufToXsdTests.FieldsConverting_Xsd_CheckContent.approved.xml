@@ -1,0 +1,52 @@
+﻿<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+  <!--Generated from: protobuf-fields.proto-->
+  <!--Namespace: Some.Namespace-->
+  <xs:complexType name="RootElement">
+    <xs:sequence>
+      <xs:element name="SimpleRequired" type="xs:string" />
+      <xs:element name="SimpleRequiredWithDefault" type="xs:string" default="SimpleRequiredDefaultValue" />
+      <xs:element name="ComplexRequired" type="ChildElement" />
+      <xs:element name="EnumeratedRequired" type="EnumerationElement" />
+      <xs:element name="EnumeratedRequiredWithDefault" type="EnumerationElement" />
+      <xs:element name="SimpleOptional" type="xs:string" minOccurs="0" />
+      <xs:element name="SimpleOptionalWithDefault" type="xs:string" minOccurs="0" default="SimpleOptionalDefaultValue" />
+      <xs:element name="ComplexOptional" type="ChildElement" minOccurs="0" />
+      <xs:element name="EnumeratedOptional" type="EnumerationElement" minOccurs="0" />
+      <xs:element name="EnumeratedOptionalWithDefault" type="EnumerationElement" minOccurs="0" />
+      <xs:element name="SimpleRepeated">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="string" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ComplexRepeated">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ChildElement" type="ChildElement" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="EnumeratedRepeated">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="EnumerationElement" type="EnumerationElement" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ChildElement">
+    <xs:sequence>
+      <xs:element name="ChildValue" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="EnumerationElement">
+    <xs:restriction base="xs:string">
+      <!--1:-->
+      <xs:enumeration value="FirstValue" />
+      <!--2:-->
+      <xs:enumeration value="SecondValue" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

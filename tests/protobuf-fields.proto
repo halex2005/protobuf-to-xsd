@@ -1,3 +1,5 @@
+package Some.Namespace;
+
 message RootElement
 {
 	//required fields
